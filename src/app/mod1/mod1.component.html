@@ -1,0 +1,81 @@
+<p>Поведение в объекте</p>
+<div>
+  <p>
+    <label>Name </label>
+    <input type="text" [(ngModel)]="form1.name" />
+    {{ form1.name }}
+  </p>
+  <p>
+    <label>Description </label>
+    <input type="text" [(ngModel)]="form1.description" />
+    {{ form1.description }}
+  </p>
+</div>
+<div><label>name: </label>{{ form1.name }}</div>
+<div><label>description: </label> {{ form1.description }}</div>
+<p>Поведение в форме</p>
+<hr />
+<form #myForm1="ngForm">
+  <p>
+    <label>Name </label>
+    <input type="text" name="name" [(ngModel)]="name" />
+    {{ name }}
+  </p>
+  <p>
+    <label>Description </label>
+    <input type="text" name="description" [(ngModel)]="description" />
+    {{ description }}
+  </p>
+  <!-- myForm1 -объект поэтому нужно значение через вэлью -->
+  <!-- <div><label>name: </label>{{ myForm1.value.name }}</div>
+<div><label>description: </label> {{ myForm1.value.description }}</div> -->
+  <!-- {{ myForm1.control | json }} - выводит объект в формате json -->
+  <!-- <pre><label>name: </label> {{ myForm1.control | json }}</pre> -->
+  <pre>{{ myForm1.value | json }}</pre>
+</form>
+<hr />
+<p>Работа с реактивными формами</p>
+<form [formGroup]="reactiveForm1">
+  <!-- директива formGroup -->
+  <p>
+    <label>Name </label>
+    <input type="text" name="name" formControlName="name" />
+    {{ reactiveForm1.value.name }}
+  </p>
+  <p>
+    <label>Description </label>
+    <input type="text" name="description" formControlName="description" />
+    {{ reactiveForm1.value.description }}
+  </p>
+  <pre>{{ reactiveForm1.value | json }}</pre>
+</form>
+
+<hr />
+<p>Работа в Реактивной форме с формбилдером</p>
+<form [formGroup]="formBuilder1">
+  <p>
+    <label>Name </label>
+    <input type="text" formControlName="name" />
+  </p>
+  <p>
+    <label>Description </label>
+    <input type="text" formControlName="description" />
+  </p>
+  <p>
+    <label>Age </label>
+    <input type="number" formControlName="age"/>
+    <br>
+    <span *ngIf="getAge.getError('min')">Поле не может быть меньше {{getAge.getError('min').min}} символов</span>
+    <br>
+    <code>AgeErrors: {{getAge.errors | json}}</code>
+  </p>
+
+  <div formArrayName="phones">
+    <p *ngFor="let phone of getPhones.controls; let i=index">
+      <label>{{ i }} </label>
+      <input type="text" [formControlName]="i" />
+    </p>
+  </div>
+
+  <pre>{{ formBuilder1.value | json }}</pre>
+</form>
