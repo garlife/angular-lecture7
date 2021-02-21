@@ -24,11 +24,17 @@ export class Mod1Component implements OnInit {
   constructor(fb: FormBuilder) {
     //другой способ записи new FormGroup
     this.formBuilder1 = fb.group({
-      name: [''],
-      description: fb.control(''), //тоже самое что написать ['']
+      name: [null, Validators.required],
+      description: fb.control(undefined, Validators.required),  //тоже самое что написать ['']
       phones: fb.array([['+79991234567'], ['+79991234568'], ['+79991234569']]),
       age: fb.control(null, [Validators.min(10), Validators.max(100)]),
+      title: [{value:null, disabled:true},Validators.required]
     });
+    this.formBuilder1.get('name').valueChanges.subscribe(value => {
+      if (value === 'Привет'){
+        this.formBuilder1.get('description').setValue('Приветствие');
+      }
+    })
   }
 
   ngOnInit(): void {}
@@ -39,5 +45,17 @@ export class Mod1Component implements OnInit {
 
   get getAge(): FormControl {
     return this.formBuilder1.get('age') as FormControl;
+  }
+
+  toggleDE () {
+    if (this.formBuilder1.get('title').enabled) {
+      this.formBuilder1.get('title').disable();
+    }
+    else this.formBuilder1.get('title').enable();
+    ;
+  }
+
+  refresh() {
+    this.formBuilder1.reset(); 
   }
 }

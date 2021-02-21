@@ -1,4 +1,4 @@
-<p>Поведение в объекте</p>
+<h2>Поведение в объекте</h2>
 <div>
   <p>
     <label>Name </label>
@@ -13,7 +13,8 @@
 </div>
 <div><label>name: </label>{{ form1.name }}</div>
 <div><label>description: </label> {{ form1.description }}</div>
-<p>Поведение в форме</p>
+
+<h2>Поведение в форме</h2>
 <hr />
 <form #myForm1="ngForm">
   <p>
@@ -34,48 +35,93 @@
   <pre>{{ myForm1.value | json }}</pre>
 </form>
 <hr />
-<p>Работа с реактивными формами</p>
+
+<h2>Работа с реактивными формами</h2>
 <form [formGroup]="reactiveForm1">
   <!-- директива formGroup -->
   <p>
     <label>Name </label>
     <input type="text" name="name" formControlName="name" />
+    <br />
     {{ reactiveForm1.value.name }}
   </p>
   <p>
     <label>Description </label>
     <input type="text" name="description" formControlName="description" />
+    <br />
     {{ reactiveForm1.value.description }}
   </p>
   <pre>{{ reactiveForm1.value | json }}</pre>
 </form>
 
 <hr />
-<p>Работа в Реактивной форме с формбилдером</p>
+
+<h2>Работа в Реактивной форме с формбилдером</h2>
 <form [formGroup]="formBuilder1">
   <p>
     <label>Name </label>
-    <input type="text" formControlName="name" />
+    <input type="text" formControlName="name" /><br />
+    <span *ngIf="formBuilder1.get('name').dirty">Поле было изменено</span>
+    <!-- .dirty было хоть 1 изменение. -->
+    <span *ngIf="formBuilder1.get('name').pristine"
+      >Поле не изменяли (не было введено ни 1 символа)</span
+    >
+    <br />
+    <span *ngIf="formBuilder1.get('description').valid">Заполнено</span>
+    <span *ngIf="formBuilder1.get('description').invalid"
+      >Обязательное для заполнения поле</span
+    >
+    <br />
+    <code>{{ formBuilder1.get("name").status }}</code>
   </p>
   <p>
     <label>Description </label>
-    <input type="text" formControlName="description" />
+    <input type="text" name="description" formControlName="description" />
+    <br />
+    <span *ngIf="formBuilder1.get('description').touched"
+      >С полем взаимодействовали</span
+    >
+    <span *ngIf="formBuilder1.get('description').untouched"
+      >С полем не было взаимодействия</span
+    >
+    <br />
+    <span *ngIf="formBuilder1.get('description').valid">Заполнено</span>
+    <span *ngIf="formBuilder1.get('description').invalid"
+      >Обазятельное для заполнения поле</span
+    >
+    {{ reactiveForm1.value.description }}
   </p>
+
+  <p>
+    <label>Заголовок </label>
+    <input type="text" name="title" formControlName="title" />
+    <br />
+    <span *ngIf="formBuilder1.get('title').disabled">Поле не активно</span>
+    <span *ngIf="formBuilder1.get('title').enabled">Поле активно</span>
+    <br /><code>{{ formBuilder1.get("title").status }}</code>
+    <!-- status бывает 4 видов: valid, invalid, pending - в процессе - актуально для долгих(серверных) валидаций, disabled -->
+    <br /><button (click)="toggleDE()">Включить/отключить</button>
+  </p>
+  
   <p>
     <label>Age </label>
-    <input type="number" formControlName="age"/>
-    <br>
-    <span *ngIf="getAge.getError('min')">Поле не может быть меньше {{getAge.getError('min').min}} символов</span>
-    <br>
-    <code>AgeErrors: {{getAge.errors | json}}</code>
+    <input type="number" formControlName="age" />
+    <br />
+    <span *ngIf="getAge.getError('min')"
+      >Поле не может быть меньше {{ getAge.getError("min").min }} символов</span
+    >
+    <br />
+    <code>AgeErrors: {{ getAge.errors | json }}</code>
   </p>
 
   <div formArrayName="phones">
-    <p *ngFor="let phone of getPhones.controls; let i=index">
+    <p *ngFor="let phone of getPhones.controls; let i = index">
       <label>{{ i }} </label>
       <input type="text" [formControlName]="i" />
     </p>
   </div>
+
+  <p><button (click)="refresh()">REFRESH</button></p>
 
   <pre>{{ formBuilder1.value | json }}</pre>
 </form>
